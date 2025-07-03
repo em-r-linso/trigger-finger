@@ -5,16 +5,21 @@ extends Node3D
 @export var PLAYER : Node3D
 @export var VIEW_ANGLE : int
 @export var TARGET_AQUISITION_TIME : float
+@export var TARGET_AQUISITION_AREA : float # percentage of screen space that can be fired at
 
 
 var rects = {} # okay so we basically don't use the values of this AT ALL because we generate valid_rects
 var target_aquisition = 0.0 # percentage 0.0-1.0
 var primary_target = null
+var target_aquisition_area = Rect2()
 
 
 func _ready() -> void:
 	SignalBus.target_spawned.connect(on_target_spawned)
 	SignalBus.target_despawned.connect(on_target_despawned)
+	
+	get_tree().root.size_changed.connect(on_viewport_resize)
+	on_viewport_resize()
 
 
 func _exit_tree() -> void:
@@ -28,9 +33,24 @@ func on_target_spawned(target: CollisionShape3D):
 
 func on_target_despawned(target: CollisionShape3D):
 	rects.erase(target)
+	
+	
+func on_viewport_resize():
+	var viewport = get_viewport().get_visible_rect()
+	var center = viewport.get_center()
+	var w = viewport.size.x * TARGET_AQUISITION_AREA
+	var h = viewport.size.y * TARGET_AQUISITION_AREA
+	var x = center.x - (w / 2.0)
+	var y = center.y - (h / 2.0)
+	
+	target_aquisition_area = Rect2(x, y, w, h)
+	
+	print(target_aquisition_area)
+	
+	SignalBus.targeting_aquisition_rect_updated.emit(target_aquisition_area)
 
 
-func _process(delta: float) -> void:	
+func _process(delta: float) -> void:
 	# cull invalid targets
 	var valid_rects = cull_invalid_targets(rects)
 	
@@ -54,7 +74,7 @@ func _process(delta: float) -> void:
 		identified_target = identify_primary_target(valid_rects)
 
 	# new target identified!
-	if (identified_target != primary_target):
+	if (identified_target != primary_target || identified_target == null):
 		primary_target = identified_target
 		target_aquisition = 0.0
 
@@ -89,8 +109,9 @@ func identify_primary_target(valid_rects: Dictionary):
 	var closest_target = null
 	var closest_distance = 99999 # is there a max float value I can get in Godot?
 	for target in valid_rects.keys():
-		var distance = valid_rects[target].get_center().distance_to(viewport_center)
-		if (distance < closest_distance):
+		var rect = valid_rects[target]
+		var distance = rect.get_center().distance_to(viewport_center)
+		if (distance < closest_distance && target_aquisition_area.intersects(rect)):
 			closest_target = target
 			closest_distance = distance
 	return closest_target

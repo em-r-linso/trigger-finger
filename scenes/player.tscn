@@ -57,3 +57,4 @@ CAMERA = NodePath("../Camera Arm/Camera Pivot/Camera3D")
 PLAYER = NodePath("..")
 VIEW_ANGLE = 70
 TARGET_AQUISITION_TIME = 0.5
+TARGET_AQUISITION_AREA = 0.2
