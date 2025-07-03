@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvqlghjmtpbpd"]
+
+[ext_resource type="Script" uid="uid://b7tcbuw1x2e6i" path="res://scripts/target.gd" id="1_b37e2"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7k104"]
+
+[node name="Target" type="CollisionShape3D" groups=["Targets"]]
+shape = SubResource("CapsuleShape3D_7k104")
+script = ExtResource("1_b37e2")

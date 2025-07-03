@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=3 uid="uid://c7gvw8i1c5acg"]
+
+[ext_resource type="Script" uid="uid://c6b8d30lf6olq" path="res://scripts/spawner.gd" id="1_mcln3"]
+[ext_resource type="PackedScene" uid="uid://ccyrsqhbbfkyw" path="res://scenes/enemy.tscn" id="2_bphdf"]
+[ext_resource type="Shader" uid="uid://b3qw752gl03l6" path="res://shaders/main.gdshader" id="3_7ocbr"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7mycd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_272bh"]
+render_priority = 0
+shader = ExtResource("3_7ocbr")
+
+[sub_resource type="SphereMesh" id="SphereMesh_5vw27"]
+material = SubResource("ShaderMaterial_272bh")
+radial_segments = 8
+rings = 8
+
+[node name="Spawner" type="StaticBody3D"]
+collision_layer = 64
+collision_mask = 0
+script = ExtResource("1_mcln3")
+ENEMY_TO_SPAWN = ExtResource("2_bphdf")
+TIME_BETWEEN_SPAWNS = 10
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_7mycd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_5vw27")

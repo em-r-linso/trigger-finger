@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://brtca2wc6yy0i"]
+
+[ext_resource type="Script" uid="uid://qu2uinogy4y7" path="res://scripts/player.gd" id="1_4flbx"]
+[ext_resource type="Shader" uid="uid://b3qw752gl03l6" path="res://shaders/main.gdshader" id="2_i3pqv"]
+[ext_resource type="Script" uid="uid://hysl7ji7mv4g" path="res://scripts/camera_arm.gd" id="2_onrkg"]
+[ext_resource type="Texture2D" uid="uid://b2l8hbcdhxw6t" path="res://images/Screenshot from 2025-02-27 15-06-22.png" id="3_hqtel"]
+[ext_resource type="Script" uid="uid://cxo75l56q6j1a" path="res://scripts/targeting.gd" id="5_qlg0r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_onrkg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hqtel"]
+render_priority = 0
+shader = ExtResource("2_i3pqv")
+shader_parameter/texture_albedo = ExtResource("3_hqtel")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_i3pqv"]
+material = SubResource("ShaderMaterial_hqtel")
+radial_segments = 8
+rings = 1
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("CAMERA_ARM") groups=["Player"]]
+collision_mask = 128
+script = ExtResource("1_4flbx")
+CAMERA_ARM = NodePath("Camera Arm")
+SPEED = 8.0
+NO_INPUT_SPEED = 0.4
+JUMP_VELOCITY = 8.0
+INITIAL_GRAVITY_MULTIPLIER = 0.5
+FINAL_GRAVITY_MULTIPLIER = 2.2
+GRAVITY_CHANGE_RATE = 0.05
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_onrkg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_i3pqv")
+
+[node name="Camera Arm" type="SpringArm3D" parent="." node_paths=PackedStringArray("PLAYER")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+collision_mask = 128
+spring_length = 0.0
+margin = 0.05
+script = ExtResource("2_onrkg")
+PLAYER = NodePath("..")
+MOUSE_LOOK_VERTICAL_SENSITIVITY = 0.005
+MOUSE_LOOK_HORIZONTAL_SENSITIVITY = 0.005
+VERTICAL_MIN_ANGLE = -1.2
+VERTICAL_MAX_ANGLE = 1.2
+
+[node name="Camera Pivot" type="Node3D" parent="Camera Arm"]
+
+[node name="Camera3D" type="Camera3D" parent="Camera Arm/Camera Pivot"]
+
+[node name="Targeting" type="Node3D" parent="." node_paths=PackedStringArray("CAMERA", "PLAYER")]
+script = ExtResource("5_qlg0r")
+CAMERA = NodePath("../Camera Arm/Camera Pivot/Camera3D")
+PLAYER = NodePath("..")
+VIEW_ANGLE = 70
+TARGET_AQUISITION_TIME = 0.5

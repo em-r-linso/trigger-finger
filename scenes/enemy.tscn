@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=3 uid="uid://ccyrsqhbbfkyw"]
+
+[ext_resource type="Script" uid="uid://tj2lsj1f0ipo" path="res://scripts/enemy.gd" id="1_4ra3w"]
+[ext_resource type="Shader" uid="uid://b3qw752gl03l6" path="res://shaders/main.gdshader" id="2_5uy6h"]
+[ext_resource type="PackedScene" uid="uid://cvqlghjmtpbpd" path="res://scenes/target.tscn" id="2_c4w8v"]
+[ext_resource type="Texture2D" uid="uid://p0brnvfn65pc" path="res://images/icon.svg" id="3_c4w8v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qi2p4"]
+render_priority = 0
+shader = ExtResource("2_5uy6h")
+shader_parameter/texture_albedo = ExtResource("3_c4w8v")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_i3pqv"]
+material = SubResource("ShaderMaterial_qi2p4")
+radial_segments = 8
+rings = 1
+
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("MODEL")]
+collision_layer = 2
+collision_mask = 130
+script = ExtResource("1_4ra3w")
+MODEL = NodePath("MeshInstance3D")
+
+[node name="Target" parent="." instance=ExtResource("2_c4w8v")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_i3pqv")
+
+[connection signal="destroyed" from="Target" to="." method="_on_target_destroyed"]

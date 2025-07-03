@@ -1,0 +1,302 @@
+[gd_scene load_steps=17 format=3 uid="uid://d0nolfeiwi23b"]
+
+[ext_resource type="PackedScene" uid="uid://brtca2wc6yy0i" path="res://scenes/player.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://b5gy4sjqxsw0h" path="res://scripts/ui_viewport.gd" id="1_o6xl0"]
+[ext_resource type="Script" uid="uid://x30xvxhltsax" path="res://scripts/ui.gd" id="2_85g3d"]
+[ext_resource type="Shader" uid="uid://b3qw752gl03l6" path="res://shaders/main.gdshader" id="3_h2yge"]
+[ext_resource type="Texture2D" uid="uid://cpygx8a8fi74o" path="res://images/WBT Graphics - Prescription Medicine Runs.png" id="4_1bvp3"]
+[ext_resource type="Shader" uid="uid://42qnhj7rgpdq" path="res://shaders/ui_distortion.gdshader" id="4_tefeu"]
+[ext_resource type="Shader" uid="uid://cm613wg2xqtp3" path="res://shaders/posterize.gdshader" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://dba38evj422ax" path="res://images/Screenshot from 2025-03-16 17-20-39.png" id="6_7mycd"]
+[ext_resource type="PackedScene" uid="uid://c7gvw8i1c5acg" path="res://scenes/spawner.tscn" id="6_272bh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tipki"]
+shader = ExtResource("4_tefeu")
+shader_parameter/bar_height = 8.0
+shader_parameter/scroll_speed = 1.0
+shader_parameter/horizontal_offset = 0.001
+shader_parameter/flicker_rate = 0.15
+shader_parameter/flicker_interval = 0.1
+shader_parameter/noise_rate = 0.5
+shader_parameter/x_pixel_size = 5
+shader_parameter/y_pixel_size = 5
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_tefeu"]
+viewport_path = NodePath("UI Viewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1bvp3"]
+render_priority = 0
+shader = ExtResource("3_h2yge")
+shader_parameter/texture_albedo = ExtResource("4_1bvp3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o6xl0"]
+shader = ExtResource("5_lquwl")
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_272bh"]
+panorama = ExtResource("6_7mycd")
+
+[sub_resource type="Sky" id="Sky_5vw27"]
+sky_material = SubResource("PanoramaSkyMaterial_272bh")
+
+[sub_resource type="Environment" id="Environment_kek77"]
+background_mode = 2
+sky = SubResource("Sky_5vw27")
+
+[node name="Main" type="Node3D"]
+
+[node name="UI Viewport" type="SubViewport" parent="." node_paths=PackedStringArray("UI_OUTPUT")]
+transparent_bg = true
+render_target_clear_mode = 1
+script = ExtResource("1_o6xl0")
+UI_OUTPUT = NodePath("../UI Output")
+CLEAR_INTERVAL = 0.1
+
+[node name="UI Root" type="Control" parent="UI Viewport"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_85g3d")
+REDRAW_INTERVAL = 0.033
+
+[node name="Label" type="Label" parent="UI Viewport/UI Root"]
+layout_mode = 1
+offset_right = 208.0
+offset_bottom = 23.0
+text = "LOREM IPSUM"
+
+[node name="UI Output" type="TextureRect" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_tipki")
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = SubResource("ViewportTexture_tefeu")
+
+[node name="Player" parent="." instance=ExtResource("1_ig7tw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 9.5957, 20)
+
+[node name="terrain" type="Node3D" parent="." groups=["Terrain"]]
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 0)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D6" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 0)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D7" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 2, 0)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D8" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 2, 0)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D9" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 10)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D10" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D11" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 10)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D12" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 10)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D13" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 2, 10)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D14" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 20)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D15" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 20)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D16" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 4.59235, 20)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 6.34192, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D17" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 20)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D18" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 2, 20)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D19" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 30)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D20" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 30)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D21" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 30)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D22" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 30)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D23" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 2, 30)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D24" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 40)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D25" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 40)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D26" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2, 40)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D27" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 2, 40)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CSGBox3D28" type="CSGBox3D" parent="terrain" groups=["Terrain"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 2, 40)
+use_collision = true
+collision_layer = 128
+collision_mask = 0
+size = Vector3(10, 10, 10)
+material = SubResource("ShaderMaterial_1bvp3")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_o6xl0")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kek77")
+
+[node name="Spawner" parent="." instance=ExtResource("6_272bh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.79462, 7.68211, 2.57424)
+TIME_BETWEEN_SPAWNS = 2
+
+[node name="Spawner3" parent="." instance=ExtResource("6_272bh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.24693, 8.05159, 39.2256)
+TIME_BETWEEN_SPAWNS = 2
